@@ -1,4 +1,5 @@
 .idea/
+.env
 # IDE
 .vscode/
 .DS_STORE
