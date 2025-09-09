@@ -7,10 +7,10 @@ use toubilib\api\middlewares\Cors;
 $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__ );
 $dotenv->load();
 
-
-
-$app = AppFactory::create();
-
+$builder = new ContainerBuilder();
+$builder->addDefinitions(__DIR__ . '/settings.php' );
+$c=$builder->build();
+$app = AppFactory::createFromContainer($c);
 
 $app->addBodyParsingMiddleware();
 $app->addRoutingMiddleware();

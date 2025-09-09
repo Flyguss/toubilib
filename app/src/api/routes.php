@@ -10,6 +10,7 @@ return function( \Slim\App $app):\Slim\App {
 
 
     $app->get('/', HomeAction::class);
+    $app->get('/listePraticiens', \toubilib\api\actions\GetAllPraticiens::class)->setName('liste-praticiens');
 
   
 
