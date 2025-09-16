@@ -7,4 +7,6 @@ interface PraticienRepositoryInterface
 
     public function getPraticiens() ;
 
+    public function GetPraticienById($id);
+
 }
