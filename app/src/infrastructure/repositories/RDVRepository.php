@@ -4,6 +4,8 @@ namespace toubilib\infra\repositories;
 
 
 
+use DateTime;
+use toubilib\core\application\ports\api\dtos\InputRdvDTO;
 use toubilib\core\application\ports\api\dtos\PraticienDetailleDTO;
 use toubilib\core\application\ports\api\dtos\PraticienDTO;
 use toubilib\core\application\ports\api\dtos\RdvDTO;
@@ -55,4 +57,51 @@ class RDVRepository implements RDVRepositoryInterface
         $rdv = new RdvDTO($row['motif_visite'] , $row['date_heure_debut'] , $row['date_heure_fin'])  ;
         return $rdv ;
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function createRDV($idprat, $idpat, $date, $heure, $motif, $duree)
+    {
+        // Créer les objets DateTime
+        $dateHeureDebut = new DateTime("$date $heure");
+        $dateFin = (clone $dateHeureDebut)->add(\DateInterval::createFromDateString($duree . ' minutes'));
+
+        // Formatage en string pour PostgreSQL
+        $debutStr = $dateHeureDebut->format('Y-m-d H:i:s');
+        $finStr = $dateFin->format('Y-m-d H:i:s');
+
+        $stmt = $this->pdo->prepare("
+        INSERT INTO rdv (
+            id, praticien_id, patient_id, date_heure_debut, date_heure_fin, motif_visite, duree, status, date_creation
+        ) VALUES (
+            :id, :prat, :pat, :debut, :fin, :motif, :duree, 0, NOW()
+        )
+    ");
+
+        $idRdv = $this->generateUuid() ;
+
+        $stmt->execute([
+            ':id' => $idRdv,
+            ':prat' => $idprat,
+            ':pat' => $idpat,
+            ':debut' => $debutStr,
+            ':fin' => $finStr,
+            ':motif' => $motif,
+            ':duree' => $duree
+        ]);
+
+        return "Insertion réussie du rdv d'id $idRdv";
+    }
+
+    public function generateUuid() {
+        return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            random_int(0, 0xffff), random_int(0, 0xffff),
+            random_int(0, 0xffff),
+            random_int(0, 0x0fff) | 0x4000,
+            random_int(0, 0x3fff) | 0x8000,
+            random_int(0, 0xffff), random_int(0, 0xffff), random_int(0, 0xffff)
+        );
+    }
+
 }

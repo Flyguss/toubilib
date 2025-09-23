@@ -14,6 +14,7 @@ return function( \Slim\App $app):\Slim\App {
     $app->get('/Praticien/{id}', \toubilib\api\actions\GetPraticienById::class)->setName('PraticienDetaille');
     $app->get('/RDV/{id}/{dateDebut}/{dateFin}', \toubilib\api\actions\GetAllRDVOfPraticienBetween2Date::class)->setName('RdvOccupées');
     $app->get('/RDV/{id}', \toubilib\api\actions\GetRdvById::class)->setName('PraticienDetaille');
+    $app->get('/RDV/creerRDV/{idPraticien},{idPatient},{date},{heure},{motif},{duree}', \toubilib\api\actions\CreateRDV::class)->setName('CreerRdv');
 
   
 

@@ -11,4 +11,6 @@ interface ServiceRDVInterface
 
     public function Rdv(mixed $id);
 
+    public function CreerRdv(dtos\InputRdvDTO $input);
+
 }

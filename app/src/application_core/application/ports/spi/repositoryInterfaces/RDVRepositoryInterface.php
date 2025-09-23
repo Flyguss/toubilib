@@ -9,4 +9,6 @@ interface RDVRepositoryInterface
 
     public function getRdvById(mixed $id);
 
+    public function createRDV($idprat , $idpat , $date , $heure , $motif , $duree);
+
 }
