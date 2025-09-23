@@ -4,6 +4,7 @@ namespace toubilib\core\application\ports\api\dtos;
 
 class InputRdvDTO
 {
+
     private string $motif , $date , $heure , $idPrat , $idPat , $duree  ;
 
     public function __construct ($m , $d , $h , $idPrat , $idPat , $duree) {

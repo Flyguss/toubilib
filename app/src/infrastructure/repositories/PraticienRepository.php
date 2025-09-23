@@ -72,35 +72,30 @@ class PraticienRepository implements PraticienRepositoryInterface
         return $moyens ;
     }
 
-    public function getMotifVisiteFromPraticienId($id) : array{
-        $requete = $this->pdo->prepare('SELECT * from praticien2motif inner join motif_visite on praticien2motif.motif_id = motif_visite.id where praticien_id=:id ') ;
+    public function getMotifVisiteFromPraticienId($id) : array
+    {
+        $requete = $this->pdo->prepare('SELECT * from praticien2motif inner join motif_visite on praticien2motif.motif_id = motif_visite.id where praticien_id=:id ');
         $requete->execute([
             'id' => $id
-        ]) ;
-
-        $motifs = [] ;
-        while($row = $requete->fetch(\PDO::FETCH_ASSOC)) {
-            $motif = $row['libelle'] ;
-            $motifs[] = $motif ;
-        }
-
-        return $motifs ;
-    }
-
-    public function GetRDVForPraticienBetween2Date($id, $dateDebut, $dateFin): array {
-        $requete = $this->pdo->prepare('SELECT * FROM rdv  WHERE praticien_id = :id AND date_heure_debut BETWEEN :dateD AND :dateF ORDER BY date_heure_debut ASC;') ;
-        $requete->execute([
-           'id' => $id,
-           'dateD' => $dateDebut,
-           'dateF' => $dateFin
         ]);
 
-        $rdvs = [] ;
-        while($row = $requete->fetch(\PDO::FETCH_ASSOC)) {
-            $rdv = $row[''] ;
-            $rdvs[] = $rdv ;
+        $motifs = [];
+        while ($row = $requete->fetch(\PDO::FETCH_ASSOC)) {
+            $motif = $row['libelle'];
+            $motifs[] = $motif;
         }
 
-        return $rdvs ;
+        return $motifs;
+    }
+
+    public function verifyMotifOfPraticienByLibelleAndIdPraticien($libelle , $idprat) {
+        $requete = $this->pdo->prepare("SELECT * from motif inner join praticien2motif motif.id = praticien2motif.motif_id where libelle = :lib") ;
+        $requete->execute([
+            'lib' => $libelle,
+        ]);
+
+        $row = $requete->fetch(\PDO::FETCH_ASSOC) ;
+        return $row['libelle'] ;
+
     }
 }
