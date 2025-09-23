@@ -86,4 +86,21 @@ class PraticienRepository implements PraticienRepositoryInterface
 
         return $motifs ;
     }
+
+    public function GetRDVForPraticienBetween2Date($id, $dateDebut, $dateFin): array {
+        $requete = $this->pdo->prepare('SELECT * FROM rdv  WHERE praticien_id = :id AND date_heure_debut BETWEEN :dateD AND :dateF ORDER BY date_heure_debut ASC;') ;
+        $requete->execute([
+           'id' => $id,
+           'dateD' => $dateDebut,
+           'dateF' => $dateFin
+        ]);
+
+        $rdvs = [] ;
+        while($row = $requete->fetch(\PDO::FETCH_ASSOC)) {
+            $rdv = $row[''] ;
+            $rdvs[] = $rdv ;
+        }
+
+        return $rdvs ;
+    }
 }

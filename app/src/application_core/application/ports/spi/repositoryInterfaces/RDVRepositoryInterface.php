@@ -7,4 +7,6 @@ interface RDVRepositoryInterface
 
     public function GetRDVForPraticienBetween2Date($id , $dateDebut , $dateFin) : array ;
 
+    public function getRdvById(mixed $id);
+
 }

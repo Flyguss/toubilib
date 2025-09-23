@@ -21,4 +21,9 @@ class ServiceRDV implements ServiceRDVInterface
     {
         return $this->RDVRepository->GetRDVForPraticienBetween2Date($id , $dateD , $dateF) ;
     }
+
+    public function Rdv($id)
+    {
+        return $this->RDVRepository->getRdvById($id) ;
+    }
 }

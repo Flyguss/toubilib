@@ -43,4 +43,16 @@ class RDVRepository implements RDVRepositoryInterface
 
         return $rdvs ;
     }
+
+    public function getRdvById($id)
+    {
+        $requete = $this->pdo->prepare('SELECT * from rdv where id=:id') ;
+        $requete->execute([
+            'id' => $id
+        ]) ;
+
+        $row = $requete->fetch(\PDO::FETCH_ASSOC) ;
+        $rdv = new RdvDTO($row['motif_visite'] , $row['date_heure_debut'] , $row['date_heure_fin'])  ;
+        return $rdv ;
+    }
 }
