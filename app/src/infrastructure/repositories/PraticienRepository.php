@@ -89,7 +89,7 @@ class PraticienRepository implements PraticienRepositoryInterface
     }
 
     public function verifyMotifOfPraticienByLibelleAndIdPraticien($libelle , $idprat) {
-        $requete = $this->pdo->prepare("SELECT * from motif inner join praticien2motif motif.id = praticien2motif.motif_id where libelle = :lib") ;
+        $requete = $this->pdo->prepare("SELECT * from motif_visite inner join praticien2motif on motif_visite.id = praticien2motif.motif_id where libelle = :lib") ;
         $requete->execute([
             'lib' => $libelle,
         ]);

@@ -25,6 +25,11 @@ class PatientRepository implements PatientRepositoryInterface
         ]) ;
 
         $row = $requete->fetch(\PDO::FETCH_ASSOC) ;
+
+        if (!$row) {
+            return null; // ou false
+        }
+
         $praticien = new PatientDTO( $row['nom'] , $row['prenom'] ) ;
         return $praticien ;
     }

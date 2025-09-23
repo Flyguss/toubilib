@@ -61,6 +61,6 @@ return [
 
     RDVRepositoryInterface::class => fn(ContainerInterface $c) => new RDVRepository($c->get('pdo')),
 
-    PatientRepositoryInterface::class => fn(ContainerInterface $c) => new PatientRepository($c->get('pdo')),
+    PatientRepositoryInterface::class => fn(ContainerInterface $c) => new PatientRepository($c->get('patient.pdo')),
     ];
 

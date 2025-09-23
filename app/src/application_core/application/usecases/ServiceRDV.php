@@ -67,10 +67,12 @@ class ServiceRDV implements ServiceRDVInterface
             throw new \DomainException("Les rendez-vous doivent être pris entre 8h et 19h.");
         }
 
-        $rdvsExistants = $this->RDVRepository->GetRDVForPraticienBetween2Date($input->getIdPrat(), $dateDebut, $dateFin);
+        $rdvsExistants = $this->RDVRepository->GetRDVForPraticienBetween2Date($input->getIdPrat(), $dateDebut->format('Y-m-d H:i:s'), $dateFin->format('Y-m-d H:i:s')
+        );
+
         foreach ($rdvsExistants as $rdv) {
-            $rdvDebut = new DateTime($rdv['date_heure_debut']);
-            $rdvFin   = new DateTime($rdv['date_heure_fin']);
+            $rdvDebut = new DateTime($rdv->getDateDebut());
+            $rdvFin   = new DateTime($rdv->getDateFin());
             if ($dateDebut < $rdvFin && $dateFin > $rdvDebut) {
                 throw new \DomainException("Le praticien n'est pas disponible sur ce créneau.");
             }
