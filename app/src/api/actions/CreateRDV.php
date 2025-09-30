@@ -17,11 +17,31 @@ class CreateRDV extends AbstractAction
 
     public function __invoke(ServerRequestInterface $rq, ResponseInterface $rs, array $args): ResponseInterface
     {
-        $input = new InputRdvDTO($args['motif'] , $args['date'] , $args['heure'] , $args['idPraticien'] , $args['idPatient'] , $args['duree']) ;
+        $idPraticien = $args['id'];
 
-        $result = $this->rdvService->CreerRdv($input) ;
+        $data = $rq->getParsedBody();
+
+        if (
+            !isset($data['idPatient'], $data['date'], $data['heure'], $data['motif'], $data['duree'])
+        ) {
+            $rs->getBody()->write(json_encode(["error" => "Paramètres manquants"]));
+            return $rs->withStatus(400)->withHeader('Content-Type', 'application/json');
+        }
+
+
+        $input = new InputRdvDTO(
+            $data['motif'],
+            $data['date'],
+            $data['heure'],
+            $idPraticien,
+            $data['idPatient'],
+            $data['duree']
+        );
+
+        // Appel du service métier
+        $result = $this->rdvService->CreerRdv($input);
 
         $rs->getBody()->write(json_encode($result));
-        return $rs->withHeader('Content-Type', 'application/json');
+        return $rs->withStatus(201)->withHeader('Content-Type', 'application/json');
     }
 }
