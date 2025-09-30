@@ -33,7 +33,7 @@ class GetAllPraticiens extends AbstractAction {
             }, $praticiens);
 
             $rs->getBody()->write(json_encode($praticiensArray));
-            return $rs->withHeader('Content-Type', 'application/json');
+            return $rs->withStatus(200)->withHeader('Content-Type', 'application/json');
         }
     }
 

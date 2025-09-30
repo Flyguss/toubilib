@@ -32,7 +32,7 @@ class GetAllRDVOfPraticienBetween2Date extends AbstractAction {
         // Validation basique
         if (!$dateD || !$dateF) {
             $rs->getBody()->write(json_encode([
-                'error' => 'Les paramètres date_debut et date_fin sont obligatoires.'
+                'error' => 'Les paramètres date_debut et date_fin sont obligatoires et doivent etre mise dans le query string avec comme nom date_debut et date_fin.'
             ]));
             return $rs
                 ->withStatus(400)

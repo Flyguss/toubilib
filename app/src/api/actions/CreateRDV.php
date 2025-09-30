@@ -29,16 +29,7 @@ class CreateRDV extends AbstractAction
         }
 
 
-        $input = new InputRdvDTO(
-            $data['motif'],
-            $data['date'],
-            $data['heure'],
-            $idPraticien,
-            $data['idPatient'],
-            $data['duree']
-        );
-
-        // Appel du service métier
+        $input = $rq->getAttribute('rdvDTO'); // instance de InputRdvDTO
         $result = $this->rdvService->CreerRdv($input);
 
         $rs->getBody()->write(json_encode($result));
