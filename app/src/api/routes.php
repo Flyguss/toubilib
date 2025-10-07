@@ -13,7 +13,7 @@ return function(\Slim\App $app):\Slim\App {
     $app->get('/rdvs/{id}', \toubilib\api\actions\GetRdvById::class)->setName('RDVDetaille');
     $app->post('/praticiens/{id}/rdvs', \toubilib\api\actions\CreateRDV::class)->add(ValidateRDVInputMiddleware::class);
     $app->delete('/rdv/{id}', \toubilib\api\actions\DeleteRDV::class)->add(ValidateRDVInputMiddleware::class);
-    $app->post('/auth/login', \toubilib\api\actions\AuthAction::class);
+    $app->post('/auth/signin', \toubilib\api\actions\SignIn::class);
 
 
 
