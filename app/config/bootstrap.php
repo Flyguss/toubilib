@@ -16,8 +16,8 @@ $app->addBodyParsingMiddleware();
 $app->addRoutingMiddleware();
 $app->addErrorMiddleware($c->get('displayErrorDetails'), false, false)
     ->getDefaultErrorHandler()
-    ->forceContentType('application/json')
-;
+    ->forceContentType('application/json') ;
+$app->add(new Cors());
 
 $app = (require_once __DIR__ . '/../src/api/routes.php')($app);
 
