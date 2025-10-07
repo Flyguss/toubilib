@@ -81,4 +81,14 @@ class ServiceRDV implements ServiceRDVInterface
 
         return $this->RDVRepository->createRDV($input->getIdPrat() , $input->getIdPat() , $input->getDate() , $input->getHeure() , $input->getMotif() , $input->getDuree()) ;
     }
+
+    public function deleteRDV($idRdv) {
+        $rdv = $this->RDVRepository->GetRDVById($idRdv);
+        if (!$rdv) {
+            throw new \DomainException("Le rendez-vous avec l'ID $id n'existe pas.");
+        }
+
+        $this->RDVRepository->DeleteRDVById($idRdv);
+    }
+
 }

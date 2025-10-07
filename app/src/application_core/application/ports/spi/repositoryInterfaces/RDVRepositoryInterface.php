@@ -11,4 +11,6 @@ interface RDVRepositoryInterface
 
     public function createRDV($idprat , $idpat , $date , $heure , $motif , $duree);
 
+    public function DeleteRDVById($idRdv);
+
 }

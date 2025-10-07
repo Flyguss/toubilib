@@ -13,4 +13,6 @@ interface ServiceRDVInterface
 
     public function CreerRdv(dtos\InputRdvDTO $input);
 
+    public function deleteRDV($idRdv);
+
 }

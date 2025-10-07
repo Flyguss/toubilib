@@ -104,4 +104,9 @@ class RDVRepository implements RDVRepositoryInterface
         );
     }
 
+    public function DeleteRDVById($idRdv)
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM rdv WHERE id = :id");
+        $stmt->execute(['id' => $idRdv]);
+    }
 }

@@ -12,6 +12,7 @@ return function(\Slim\App $app):\Slim\App {
     $app->get('/praticiens/{id}/rdvs', \toubilib\api\actions\GetAllRDVOfPraticienBetween2Date::class)->setName('RdvOccupées');
     $app->get('/rdvs/{id}', \toubilib\api\actions\GetRdvById::class)->setName('RDVDetaille');
     $app->post('/praticiens/{id}/rdvs', \toubilib\api\actions\CreateRDV::class)->add(ValidateRDVInputMiddleware::class);
+    $app->delete('/rdv/{id}', \toubilib\api\actions\DeleteRDV::class)->add(ValidateRDVInputMiddleware::class);
 
   
 
