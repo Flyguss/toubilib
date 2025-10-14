@@ -12,12 +12,14 @@ $builder->addDefinitions(__DIR__ . '/settings.php' );
 $c=$builder->build();
 $app = AppFactory::createFromContainer($c);
 
+$app->add(new Cors());
+
 $app->addBodyParsingMiddleware();
 $app->addRoutingMiddleware();
 $app->addErrorMiddleware($c->get('displayErrorDetails'), false, false)
     ->getDefaultErrorHandler()
     ->forceContentType('application/json') ;
-$app->add(new Cors());
+
 
 $app = (require_once __DIR__ . '/../src/api/routes.php')($app);
 
