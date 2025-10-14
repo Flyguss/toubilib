@@ -3,13 +3,17 @@
 namespace toubilib\api\provider;
 
 use toubilib\core\application\exceptions\AuthenticationFailedException;
+use toubilib\core\application\exceptions\AuthProviderExpiredAccessToken;
+use toubilib\core\application\exceptions\AuthProviderInvalidAccessToken;
 use toubilib\core\application\exceptions\AuthProviderInvalidCredentials;
-use toubilib\core\application\ports\spi\exceptions\Interface\AuthProviderInterface;
-use toubilib\core\application\ports\spi\exceptions\Interface\JwtManagerInterface;
+use toubilib\core\application\exceptions\JwtManagerExpiredTokenException;
+use toubilib\core\application\exceptions\JwtManagerInvalidTokenException;
 use toubilib\core\application\ports\api\dtos\AuthDTO;
 use toubilib\core\application\ports\api\dtos\CredentialDTO;
 use toubilib\core\application\ports\api\dtos\ProfileDTO;
 use toubilib\core\application\ports\api\ServiceAuthInterface;
+use toubilib\core\application\ports\spi\exceptions\Interface\AuthProviderInterface;
+use toubilib\core\application\ports\spi\exceptions\Interface\JwtManagerInterface;
 
 class JwtAuthProvider implements AuthProviderInterface {
     private ServiceAuthInterface $authnService;
@@ -39,13 +43,15 @@ class JwtAuthProvider implements AuthProviderInterface {
         return $authDTO;
     }
 
-    public function register(CredentialDTO $credentials, int $role): ProfileDTO
-    {
-        // TODO: Implement register() method.
+    public function getSignedInUser(string $token): ProfileDTO {
+        try {
+            $payload = $this->jwtManager->validate($token);
+        } catch (JwtManagerExpiredTokenException $e) {
+            throw new AuthProviderExpiredAccessToken('expired access token :'. $e->getMessage());
+        } catch (JwtManagerInvalidTokenException $e) {
+            throw new AuthProviderInvalidAccessToken('invalid access token :'. $e->getMessage());
+        }
+        return new ProfileDTO($payload['id'], $payload['email'], $payload['role']);
     }
 
-    public function getSignedInUser(string $token): ProfileDTO
-    {
-        // TODO: Implement getSignedInUser() method.
-    }
 }

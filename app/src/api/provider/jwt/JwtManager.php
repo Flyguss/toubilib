@@ -1,7 +1,12 @@
 <?php
 
 namespace toubilib\api\provider\jwt;
+use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+use Firebase\JWT\SignatureInvalidException;
+use toubilib\core\application\exceptions\JwtManagerExpiredTokenException;
+use toubilib\core\application\exceptions\JwtManagerInvalidTokenException;
 use toubilib\core\application\ports\spi\exceptions\Interface\JwtManagerInterface;
 
 class JwtManager implements JwtManagerInterface {
@@ -31,6 +36,17 @@ class JwtManager implements JwtManagerInterface {
             'upr' => $payload
         ], $this->secret, 'HS512');
 
+    }
+
+    public function validate(string $jwtToken): array {
+        try {
+            $jwtToken = JWT::decode($jwtToken, new Key( $this->secret, 'HS512'));
+        } catch (ExpiredException $e) {
+            throw new JwtManagerExpiredTokenException("expired jwt token");
+        } catch (SignatureInvalidException | \UnexpectedValueException | \DomainException $e) {
+            throw new JwtManagerInvalidTokenException("invalid jwt token");
+        };
+        return (array) $jwtToken->upr;
     }
 
 }
