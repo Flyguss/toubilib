@@ -1,51 +1,48 @@
 <?php
 
-namespace toubilib\core\application\usecases;
+namespace toubilib\api\provider;
 
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
+use toubilib\core\application\exceptions\AuthenticationFailedException;
+use toubilib\core\application\exceptions\AuthProviderInvalidCredentials;
 use toubilib\core\application\ports\api\dtos\AuthDTO;
+use toubilib\core\application\ports\api\dtos\CredentialDTO;
 use toubilib\core\application\ports\api\ServiceAuthInterface;
-use toubilib\core\application\ports\api\dtos\AuthTokensDTO;
+use toubilib\core\application\ports\spi\exceptions\Interface\JwtManagerInterface;
 
 class AuthProvider
 {
     private ServiceAuthInterface $authService;
-    private string $jwtSecret = 'super_secret_key';
-    private string $jwtIssuer = 'toubilib.api';
-    private int $accessTokenTTL = 3600;
-    private int $refreshTokenTTL = 86400;
+    private JwtManagerInterface $jwtManager ;
 
-    public function __construct(ServiceAuthInterface $authService)
+    public function __construct(ServiceAuthInterface $authService , JwtManagerInterface $jwtManager)
     {
         $this->authService = $authService;
+        $this->jwtManager = $jwtManager ;
+
     }
 
-    public function signin(string $email, string $password): AuthDTO
+    public function signin(CredentialDTO $dto): AuthDTO
     {
-        // Vérifie les credentials avec ton service de l’exercice 1
-        $user = $this->authService->authentification($email, $password);
+        try {
+            // Vérifie les credentials avec ton service de l’exercice 1
+            $user = $this->authService->authentification($dto);
 
-        // Génère les JWT
-        $issuedAt = time();
+            $accesstoken = $this->jwtManager->create([
+                'id' => $user->ID,
+                'email' => $user->email,
+                'role' => $user->role
+            ], JwtManagerInterface::ACCESS_TOKEN);
+            $refreshtoken = $this->jwtManager->create([
+                'id' => $user->ID,
+                'email' => $user->email,
+                'role' => $user->role
+            ], JwtManagerInterface::REFRESH_TOKEN);
 
-        $accessToken = JWT::encode([
-            'iss' => $this->jwtIssuer,
-            'iat' => $issuedAt,
-            'exp' => $issuedAt + $this->accessTokenTTL,
-            'sub' => $user->getId(),
-            'role' => $user->getRole(),
-            'email' => $user->getEmail()
-        ], $this->jwtSecret, 'HS256');
-
-        $refreshToken = JWT::encode([
-            'iss' => $this->jwtIssuer,
-            'iat' => $issuedAt,
-            'exp' => $issuedAt + $this->refreshTokenTTL,
-            'sub' => $user->getId()
-        ], $this->jwtSecret, 'HS256');
-
-        return new AuthDTO( $user->getId(), $user->getEmail(), $user->getRole(), $accessToken, $refreshToken
-        );
+            $dto = new AuthDTO($user->getId(), $user->getEmail(), $user->getRole(), $accesstoken, $refreshtoken
+            );
+        }catch (AuthenticationFailedException $e) {
+                throw new AuthProviderInvalidCredentials('Invalid credentials');
+            }
+        return $dto ;
     }
 }

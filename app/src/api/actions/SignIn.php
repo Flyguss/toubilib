@@ -4,7 +4,8 @@ namespace toubilib\api\actions;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use toubilib\core\application\usecases\AuthProvider;
+use toubilib\core\application\ports\api\dtos\CredentialDTO;
+use toubilib\core\application\ports\spi\exceptions\AuthProvider;
 
 class SignIn extends AbstractAction
 {
@@ -25,21 +26,15 @@ class SignIn extends AbstractAction
             return $rs->withStatus(400)->withHeader('Content-Type', 'application/json');
         }
 
+        $dto = new CredentialDTO($data['email'] , $data['password']) ;
+
         try {
-            $authDTO = $this->authProvider->signin($data['email'], $data['password']);
-
-            $rs->getBody()->write(json_encode([
-                'id' => $authDTO->getId(),
-                'email' => $authDTO->getEmail(),
-                'role' => $authDTO->getRole(),
-                'access_token' => $authDTO->getAccessToken(),
-                'refresh_token' => $authDTO->getRefreshToken()
-            ]));
-
-            return $rs->withStatus(200)->withHeader('Content-Type', 'application/json');
-        } catch (\DomainException $e) {
+            $authDTO = $this->authProvider->signin($dto);
+        } catch (\Exception $e) {
             $rs->getBody()->write(json_encode(['error' => $e->getMessage()]));
             return $rs->withStatus(401)->withHeader('Content-Type', 'application/json');
         }
+
+        return $rs->withStatus(200)->withHeader('Content-Type', 'application/json');
     }
 }

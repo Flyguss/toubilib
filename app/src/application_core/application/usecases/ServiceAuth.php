@@ -2,10 +2,13 @@
 
 namespace toubilib\core\application\usecases;
 
-
-use toubilib\core\application\ports\api\dtos\AuthDTO;
+use toubilib\core\application\exceptions\AuthenticationFailedException;
+use toubilib\core\application\exceptions\RepositoryEntityNotFoundException;
+use toubilib\core\application\ports\api\dtos\CredentialDTO;
+use toubilib\core\application\ports\api\dtos\ProfileDTO;
 use toubilib\core\application\ports\api\ServiceAuthInterface;
 use toubilib\core\application\ports\spi\repositoryInterfaces\AuthRepositoryInterface;
+use toubilib\core\domain\entities\praticien\User;
 
 
 class ServiceAuth implements ServiceAuthInterface
@@ -18,19 +21,28 @@ class ServiceAuth implements ServiceAuthInterface
         $this->AuthRepository = $AuthRepository;
     }
 
-    public function authentification($email, $mdp)
+    public function register(CredentialDTO $credentials, int $role): ProfileDTO {
+        try {
+            $user = new User($credentials->getEmail(), $credentials->getMdp(), $role);
+            $id = $this->AuthRepository->save($user);
+            $user->setId($id);
+        } catch( \Exception $e) {
+            throw new AuthenticationFailedException('Registration failed: ' . $e->getMessage());
+        }
+        return new ProfileDTO($user->getID(), $user->getEmail(), $user->getRole());
+    }
+
+    public function authentification($dto)
     {
-        $user = $this->AuthRepository->getUserByEmail($email) ;
-
-        if (!$user) {
-            return null ;
+        try {
+            $user = $this->AuthRepository->getUserByEmail($dto->getEmail , $dto->getMdp());
+        } catch (RepositoryEntityNotFoundException $e) {
+            throw new AuthenticationFailedException('Invalid credentials');
         }
-
-        if ($mdp !== $user['mdp']) {
-            return null ;
+        if (password_verify($dto->password, $user->getPassword())) {
+            return new ProfileDTO($user->getID(), $user->getEmail(), $user->getRole());
         }
-
-        return new AuthDTO($user['email'] , $user['mdp'] , $user['role']);
+        throw new AuthenticationFailedException('Invalid credentials');
 
     }
 }

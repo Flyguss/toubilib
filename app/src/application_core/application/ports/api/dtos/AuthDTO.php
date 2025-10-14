@@ -10,11 +10,11 @@ class AuthDTO
     private string $accessToken;
     private string $refreshToken;
 
-    public function __construct(string $id, string $email, int $role, string $accessToken, string $refreshToken)
+    public function __construct($dto, string $accessToken, string $refreshToken)
     {
-        $this->id = $id;
-        $this->email = $email;
-        $this->role = $role;
+        $this->id = $dto->getId();
+        $this->email = $dto->getEmail();
+        $this->role = $dto->getRole();
         $this->accessToken = $accessToken;
         $this->refreshToken = $refreshToken;
     }
