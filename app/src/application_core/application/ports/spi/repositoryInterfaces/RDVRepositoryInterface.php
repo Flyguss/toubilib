@@ -15,7 +15,7 @@ interface RDVRepositoryInterface
 
     public function updateStatus($id, string $status);
 
-
+    public function getRdvsByPatient($id);
 
 
 }

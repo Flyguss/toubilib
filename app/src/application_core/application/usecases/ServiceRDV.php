@@ -95,4 +95,9 @@ class ServiceRDV implements ServiceRDVInterface
     {
         $this->RDVRepository->updateStatus($id , $status);
     }
+
+    public function listeRdvbyPatient($id)
+    {
+        return $this->RDVRepository->getRdvsByPatient($id);
+    }
 }

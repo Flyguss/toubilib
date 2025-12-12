@@ -1,7 +1,7 @@
 <?php
 
 use Psr\Container\ContainerInterface;
-use toubilib\api\actions\GetAllPraticiens;
+use toubilib\api\actions\GetRdvsByPatient;
 use toubilib\core\application\ports\api\ServicePraticienInterface;
 use toubilib\core\application\ports\api\ServiceRDVInterface;
 use toubilib\core\application\ports\spi\repositoryInterfaces\PatientRepositoryInterface;
@@ -21,8 +21,8 @@ return [
 
 
     //Action
-    GetAllPraticiens::class => function (ContainerInterface $c) {
-        return new GetAllPraticiens($c->get(ServicePraticienInterface::class));
+    GetRdvsByPatient::class => function (ContainerInterface $c) {
+        return new GetRdvsByPatient($c->get(ServiceRDVInterface::class));
     },
 
     ServicePraticienInterface::class => function (ContainerInterface $c) {

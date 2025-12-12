@@ -17,4 +17,6 @@ interface ServiceRDVInterface
 
     public function updateStatus($id, mixed $status);
 
+    public function listeRdvbyPatient($id);
+
 }
