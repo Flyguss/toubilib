@@ -14,6 +14,7 @@ return function(\Slim\App $app):\Slim\App {
     $app->post('/praticiens/{id}/rdvs', \toubilib\api\actions\CreateRDV::class)->add(ValidateRDVInputMiddleware::class);
     $app->delete('/rdv/{id}', \toubilib\api\actions\DeleteRDV::class)->add(ValidateRDVInputMiddleware::class);
     $app->post('/auth/signin', \toubilib\api\actions\SignIn::class);
+    $app->patch('/rdvs/{id}/status' , \toubilib\api\actions\UpdateRdvStatus::class);
 
 
 

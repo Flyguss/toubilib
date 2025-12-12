@@ -15,4 +15,6 @@ interface ServiceRDVInterface
 
     public function deleteRDV($idRdv);
 
+    public function updateStatus($id, mixed $status);
+
 }

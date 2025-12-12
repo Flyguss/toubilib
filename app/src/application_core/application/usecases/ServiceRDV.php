@@ -91,4 +91,8 @@ class ServiceRDV implements ServiceRDVInterface
         $this->RDVRepository->DeleteRDVById($idRdv);
     }
 
+    public function updateStatus($id, mixed $status)
+    {
+        $this->RDVRepository->updateStatus($id , $status);
+    }
 }

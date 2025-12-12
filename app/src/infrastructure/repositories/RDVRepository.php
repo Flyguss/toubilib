@@ -109,4 +109,13 @@ class RDVRepository implements RDVRepositoryInterface
         $stmt = $this->pdo->prepare("DELETE FROM rdv WHERE id = :id");
         $stmt->execute(['id' => $idRdv]);
     }
+
+    public function updateStatus($id, string $status)
+    {
+        $sql = "UPDATE rdv SET status = :status WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':status' => $status, ':id' => $id]);
+
+    }
+
 }

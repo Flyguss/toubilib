@@ -13,4 +13,9 @@ interface RDVRepositoryInterface
 
     public function DeleteRDVById($idRdv);
 
+    public function updateStatus($id, string $status);
+
+
+
+
 }
