@@ -21,7 +21,29 @@ class GetAllPraticiens extends AbstractAction {
 
     public function __invoke(ServerRequestInterface $rq, ResponseInterface $rs, array $args): ResponseInterface
     {
-        $praticiens = $this->praticienService->listerPraticiens();
+
+        $specialiteId = $_GET['specialite_id'] ?? null;
+        $ville        = $_GET['ville'] ?? null;
+
+        if($ville != null && $specialiteId != null){
+            $praticiens = $this->praticienService->listerPraticiensBySpecialityIDandVille($specialiteId , $ville);
+        } else {
+            if ($specialiteId != null) {
+                $praticiens = $this->praticienService->listerPraticiensBySpecialityID($specialiteId);
+            }
+
+            if ($ville != null) {
+                $praticiens = $this->praticienService->listerPraticiensByVille($ville);
+            }
+        }
+
+
+
+        if ($ville == null && $specialiteId == null ) {
+            $praticiens = $this->praticienService->listerPraticiens();
+        }
+
+
             $praticiensArray = array_map(function ($praticien) {
                 return [
                     'nom' => $praticien->getNom(),

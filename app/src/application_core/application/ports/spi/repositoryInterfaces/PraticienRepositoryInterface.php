@@ -9,4 +9,10 @@ interface PraticienRepositoryInterface
 
     public function GetPraticienById($id);
 
+    public function GetPraticienBySpecialityId(mixed $specialiteId);
+
+    public function GetPraticienByVille($ville);
+
+    public function GetPraticienBySpecialityIdandVille(mixed $specialiteId, mixed $ville);
+
 }

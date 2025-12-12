@@ -27,4 +27,19 @@ class ServicePraticien implements ServicePraticienInterface
     {
         return $this->praticienRepository->GetPraticienById($id) ;
     }
+
+    public function listerPraticiensBySpecialityID($specialiteId)
+    {
+        return $this->praticienRepository->GetPraticienBySpecialityId($specialiteId) ;
+    }
+
+    public function listerPraticiensByVille($ville)
+    {
+        return $this->praticienRepository->GetPraticienByVille($ville) ;
+    }
+
+    public function listerPraticiensBySpecialityIDandVille(mixed $specialiteId, mixed $ville)
+    {
+        return $this->praticienRepository->GetPraticienBySpecialityIdandVille($specialiteId , $ville) ;
+    }
 }

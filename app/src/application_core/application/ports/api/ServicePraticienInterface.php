@@ -11,4 +11,10 @@ interface ServicePraticienInterface
 
     public function PraticiensDetaille($id) : PraticienDetailleDTO;
 
+    public function listerPraticiensBySpecialityID(mixed $specialiteId);
+
+    public function listerPraticiensByVille($ville);
+
+    public function listerPraticiensBySpecialityIDandVille(mixed $specialiteId, mixed $ville);
+
 }

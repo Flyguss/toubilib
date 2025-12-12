@@ -2,7 +2,7 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-use toubilib\core\application\ports\spi\exceptions\ServicePraticien;
+use toubilib\core\application\usecases\ServicePraticien;
 
 
 $config = parse_ini_file(__DIR__ . '/config/.env');

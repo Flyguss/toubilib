@@ -98,4 +98,54 @@ class PraticienRepository implements PraticienRepositoryInterface
         return $row['libelle'] ;
 
     }
+
+    public function GetPraticienBySpecialityId(mixed $specialiteId)
+    {
+        $requete = $this->pdo->prepare('SELECT * from praticien where specialite_id=:id') ;
+        $requete->execute([
+            'id' => $specialiteId
+        ]) ;
+
+        $praticiens = [] ;
+        while($row = $requete->fetch(\PDO::FETCH_ASSOC)) {
+            $praticien = new PraticienDTO($row['nom'] , $row['prenom'] , $row['ville'] , $row['email'] ,$this->getSpecialiteFromId( $row['specialite_id'])) ;
+            $praticiens[] = $praticien ;
+        }
+
+        return $praticiens ;
+    }
+
+    public function GetPraticienByVille($ville)
+    {
+
+        $requete = $this->pdo->prepare('SELECT * from praticien where ville=:ville') ;
+        $requete->execute([
+            'ville' => $ville
+        ]) ;
+
+        $praticiens = [] ;
+        while($row = $requete->fetch(\PDO::FETCH_ASSOC)) {
+            $praticien = new PraticienDTO($row['nom'] , $row['prenom'] , $row['ville'] , $row['email'] ,$this->getSpecialiteFromId( $row['specialite_id'])) ;
+            $praticiens[] = $praticien ;
+        }
+
+        return $praticiens ;
+    }
+
+    public function GetPraticienBySpecialityIdandVille(mixed $specialiteId, mixed $ville)
+    {
+        $requete = $this->pdo->prepare('SELECT * from praticien where ville=:ville and specialite_id=:id') ;
+        $requete->execute([
+            'ville' => $ville ,
+            'id' => $specialiteId
+        ]) ;
+
+        $praticiens = [] ;
+        while($row = $requete->fetch(\PDO::FETCH_ASSOC)) {
+            $praticien = new PraticienDTO($row['nom'] , $row['prenom'] , $row['ville'] , $row['email'] ,$this->getSpecialiteFromId( $row['specialite_id'])) ;
+            $praticiens[] = $praticien ;
+        }
+
+        return $praticiens ;
+    }
 }

@@ -5,6 +5,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Slim\Exception\HttpUnauthorizedException;
+use toubilib\core\application\exceptions\AuthProviderExpiredAccessToken;
+use toubilib\core\application\exceptions\AuthProviderInvalidAccessToken;
 use toubilib\core\application\ports\spi\exceptions\Interface\AuthProviderInterface;
 
 class AuthMiddleware {
